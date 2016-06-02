@@ -12,17 +12,19 @@ export class Button extends DOMObject {
 						'</div>';
 
 		this.baseClass = 'sendsay-button';
-		this.applicableStyles = {
+		this.wrapperApplStyles = {
 			'background-color': { param: 'backgroundColor' },
 			'border-radius': { param: 'borderRadius', postfix: 'px' },
 			'color': { param: 'textColor'},
-			'line-height': { param: 'lineHeighFt' ,default: 'normal'}
+			'line-height': { param: 'lineHeight' ,default: 'normal'},
+			'width': { param: 'align', mapping: { justify: '100%' }}
 		};
-		this.wrapperApplStyles = {
+		this.applicableStyles = {
 			'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
 			'padding-top': { param: 'paddingTop', postfix: 'px'},
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
-			'padding-right': { param: 'paddingRight', postfix: 'px'}
+			'padding-right': { param: 'paddingRight', postfix: 'px'},
+			'text-align': { param: 'align', mapping: { left: 'left', right: 'right', center: 'center' }}
 		};		
 	}
 
@@ -54,7 +56,7 @@ export class Button extends DOMObject {
 		let data = this.data.content || {},
 			settings = super.makeSettings();
 		settings.text = this.escapeHTML(data.text || 'Unknown');
-		settings.wrapperstyle = this.makeWrapperStyle();
+		this.createInnerRule('input', this.wrapperApplStyles);
 		return settings;
 	}
 

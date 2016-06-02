@@ -29,7 +29,12 @@ import {Form} from "./classes/Form.js";
 		    link.type = 'text/css';
 		    link.href = 'https://dl.dropbox.com/s/hq9cw3paj4tcube/sendsayforms.css';
 		    link.media = 'all';
-		    head.appendChild(link);
+		    var sibling = document.querySelector('#sendsay-generated-sheet');
+		    if(sibling) {
+		    	document.head.insertBefore(link, sibling);
+		    } else {
+		    	document.head.appendChild(link);
+		    }
 		    link.addEventListener('load', callback);
 		}
 	} 

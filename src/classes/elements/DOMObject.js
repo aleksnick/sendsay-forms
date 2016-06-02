@@ -1,4 +1,4 @@
-
+import {StyleSheet} from "./../SendsayStyleSheet.js";
 export class DOMObject {
 
 	constructor(data, parent) {
@@ -27,6 +27,18 @@ export class DOMObject {
 		};
 	}
 
+	createInnerRule(innerSelector, mapping) {
+		let styles = this.applyStyles(mapping);
+		this.rules.push(StyleSheet.addRule('.' + this.styleClass + ' ' + innerSelector, styles));
+	}
+
+	generateBaseClass() {
+		let styles = this.makeStyles();
+		this.styleClass = 'sendsay-c'+ StyleSheet.getFreeID();
+		let rule = StyleSheet.addRule('.' + this.styleClass, styles);
+		this.rules = [rule]; 
+	}
+
 	makeElement() {
 		let div = document.createElement('div'),
 			element = this.applySettings(this.makeSettings());
@@ -35,10 +47,10 @@ export class DOMObject {
 	}
 
 	makeSettings() {
+		this.generateBaseClass();
 		let data = this.data,
 			settings = {
-				classes: this.makeClasses(),
-				style: this.convertStyles(this.makeStyles())
+				classes: this.makeClasses()
 			};
 		return settings;
 	}
@@ -56,6 +68,12 @@ export class DOMObject {
 		for(var key in mapping) {
 			let val = mapping[key];
 			if(data[val.param] !== undefined || general[val.param] != undefined) {
+				let value = data[val.param] || general[val.param];
+				if(val.mapping) {
+					if(val.mapping[value])
+						styles[key] = val.mapping[value];
+					continue;
+				}
 				styles[key] = (data[val.param] || general[val.param]) + (val.postfix ? val.postfix : '');
 			} else if(val.default) {
 				styles[key] = val.default;
@@ -74,7 +92,7 @@ export class DOMObject {
 	}
 
 	makeClasses() {
-		return this.baseClass;
+		return this.baseClass + ' ' + this.styleClass;
 	}
 
 	applySettings(settings) {

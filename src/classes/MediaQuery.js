@@ -1,3 +1,5 @@
+import {StyleSheet} from "./SendsayStyleSheet.js";
+
 export class MediaQuery {
 
     constructor(data, options) {
@@ -19,11 +21,9 @@ export class MediaQuery {
 
     	let styleEl = document.createElement('style');
     	styleEl.type = 'text/css';
-    	if (styleEl.styleSheet){
-		  styleEl.styleSheet.cssText = content;
-		} else {
-		  styleEl.appendChild(document.createTextNode(content));
-		}
+
+	  	styleEl.appendChild(document.createTextNode(content));
+		
     	document.head.appendChild(styleEl);
     	this.el = styleEl;
     }
